@@ -10,3 +10,7 @@ https://classroom.udacity.com/courses/ud845
 ![](https://raw.githubusercontent.com/maobui/data_storage/master/content_provider1.png)
 
 ![](https://raw.githubusercontent.com/maobui/data_storage/master/content_provider2.png)
+
+### Content URI
+
+![](https://raw.githubusercontent.com/maobui/data_storage/master/structure_content_uri.png)
