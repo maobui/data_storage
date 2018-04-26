@@ -9,12 +9,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
 import com.me.bui.pets.data.PetContract.PetEntry;
 
 /**
  * Created by mao.bui on 4/26/2018.
  */
 public class PetProvider extends ContentProvider {
+
+    private static final String TAG = PetProvider.class.getSimpleName();
 
     private PetDbHelper mDbHelper;
 
@@ -68,7 +72,25 @@ public class PetProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+
+        int match = sUriMatcher.match(uri);
+        switch (match){
+            case PETS:
+                return insertPet(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Insertion is not support for " + uri);
+        }
+    }
+
+    private Uri insertPet(Uri uri, ContentValues contentValues) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        long id = db.insert(PetEntry.TABLE_NAME, null, contentValues);
+        if (id == -1) {
+            Log.e(TAG, " Failed insert row for " + uri);
+            return  null;
+        }
+        return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
