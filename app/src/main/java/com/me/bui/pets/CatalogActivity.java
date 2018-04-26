@@ -92,7 +92,6 @@ public class CatalogActivity extends AppCompatActivity {
 
     private void displayDatabaseInfo() {
 
-        SQLiteDatabase db =  mDbHelper.getReadableDatabase();
 
         String[] projection = {
                 PetEntry._ID,
@@ -102,15 +101,12 @@ public class CatalogActivity extends AppCompatActivity {
                 PetEntry.COLUMN_PET_WIEGHT
         };
 
-        Cursor cursor =  db.query(
-                PetEntry.TABLE_NAME,
+        Cursor cursor = getContentResolver().query(
+                PetEntry.CONTENT_URI,
                 projection,
                 null,
                 null,
-                null,
-                null,
-                null
-        );
+                null);
 
         try {
             TextView displayView = (TextView) findViewById(R.id.text_view_pet);

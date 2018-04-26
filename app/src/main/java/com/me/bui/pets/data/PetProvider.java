@@ -1,12 +1,15 @@
 package com.me.bui.pets.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.me.bui.pets.data.PetContract.PetEntry;
 
 /**
  * Created by mao.bui on 4/26/2018.
@@ -28,13 +31,32 @@ public class PetProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mDbHelper = new PetDbHelper(getContext());
-        return false;
+        return true;
     }
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] strings, @Nullable String s, @Nullable String[] strings1, @Nullable String s1) {
-        return null;
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+        Cursor cursor = null;
+
+        int match = sUriMatcher.match(uri);
+        switch (match){
+            case PETS:
+                cursor = db.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            case PET_ID:
+                selection = PetEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                cursor = db.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            default:
+                throw new IllegalArgumentException("Cannot query URI " + uri);
+        }
+        return cursor;
     }
 
     @Nullable
