@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.me.bui.pets.data.PetContract.PetEntry;
 import com.me.bui.pets.data.PetDbHelper;
@@ -56,7 +57,6 @@ public class CatalogActivity extends AppCompatActivity {
         });
 
         mDbHelper = new PetDbHelper(this);
-        displayDatabaseInfo();
     }
 
     @Override
@@ -82,6 +82,12 @@ public class CatalogActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        displayDatabaseInfo();
     }
 
     private void displayDatabaseInfo() {
@@ -110,6 +116,10 @@ public class CatalogActivity extends AppCompatActivity {
 
         long newRowId = db.insert(PetEntry.TABLE_NAME, null,values);
 
-        Log.v(TAG, "New row ID : " + newRowId);
+        if(newRowId == -1) {
+            Toast.makeText(this,"Error with saving pet", Toast.LENGTH_LONG);
+        } else {
+            Toast.makeText(this,"Pet saved with row id : " + newRowId, Toast.LENGTH_LONG);
+        }
     }
 }
