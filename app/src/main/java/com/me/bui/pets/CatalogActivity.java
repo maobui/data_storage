@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -122,36 +123,10 @@ public class CatalogActivity extends AppCompatActivity {
                 null,
                 null);
 
-        try {
-            TextView displayView = (TextView) findViewById(R.id.text_view_pet);
-            displayView.setText("Number of rows in pets database table: " + cursor.getCount() + "\n\n");
+        ListView petListView = (ListView) findViewById(R.id.list);
+        PetCusorAdapter adapter = new PetCusorAdapter(this,cursor);
+        petListView.setAdapter(adapter);
 
-            displayView.append(PetEntry._ID + " - "
-                    + PetEntry.COLUMN_PET_NAME + " - "
-                    + PetEntry.COLUMN_PET_BREED + " - "
-                    + PetEntry.COLUMN_PET_GENDER + " - "
-                    + PetEntry.COLUMN_PET_WEIGHT + "\n");
-
-            int idCurrIndx = cursor.getColumnIndex(PetEntry._ID);
-            int nameCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_NAME);
-            int breedCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_BREED);
-            int genderCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_GENDER);
-            int weightCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_WEIGHT);
-            while (cursor.moveToNext()) {
-                int currID = cursor.getInt(idCurrIndx);
-                String currName = cursor.getString(nameCurrIndx);
-                String currBreed = cursor.getString(breedCurrIndx);
-                int currGender = cursor.getInt(genderCurrIndx);
-                int currWeight = cursor.getInt(weightCurrIndx);
-                displayView.append("\n" + currID + " - "
-                    + currName + " - "
-                    + currBreed + " - "
-                    + currGender + " - "
-                    + currWeight);
-            }
-        } finally {
-            cursor.close();
-        }
     }
 
     private void insertPet() {
