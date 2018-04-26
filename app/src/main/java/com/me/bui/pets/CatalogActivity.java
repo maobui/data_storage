@@ -18,12 +18,10 @@ package com.me.bui.pets;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,7 +97,7 @@ public class CatalogActivity extends AppCompatActivity {
                 PetEntry.COLUMN_PET_NAME,
                 PetEntry.COLUMN_PET_BREED,
                 PetEntry.COLUMN_PET_GENDER,
-                PetEntry.COLUMN_PET_WIEGHT
+                PetEntry.COLUMN_PET_WEIGHT
         };
 
         Cursor cursor = getContentResolver().query(
@@ -117,13 +115,13 @@ public class CatalogActivity extends AppCompatActivity {
                     + PetEntry.COLUMN_PET_NAME + " - "
                     + PetEntry.COLUMN_PET_BREED + " - "
                     + PetEntry.COLUMN_PET_GENDER + " - "
-                    + PetEntry.COLUMN_PET_WIEGHT + "\n");
+                    + PetEntry.COLUMN_PET_WEIGHT + "\n");
 
             int idCurrIndx = cursor.getColumnIndex(PetEntry._ID);
             int nameCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_NAME);
             int breedCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_BREED);
             int genderCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_GENDER);
-            int weightCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_WIEGHT);
+            int weightCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_WEIGHT);
             while (cursor.moveToNext()) {
                 int currID = cursor.getInt(idCurrIndx);
                 String currName = cursor.getString(nameCurrIndx);
@@ -148,7 +146,7 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(PetEntry.COLUMN_PET_NAME, "Toto");
         values.put(PetEntry.COLUMN_PET_BREED, "Terrier");
         values.put(PetEntry.COLUMN_PET_GENDER, PetEntry.GENDER_MALE);
-        values.put(PetEntry.COLUMN_PET_WIEGHT, 7);
+        values.put(PetEntry.COLUMN_PET_WEIGHT, 7);
 
         Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
 

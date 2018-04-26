@@ -16,13 +16,11 @@
 package com.me.bui.pets;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +31,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.me.bui.pets.data.PetContract.PetEntry;
-import com.me.bui.pets.data.PetDbHelper;
 
 /**
  * Allows user to create a new pet or edit an existing one.
@@ -153,7 +150,7 @@ public class EditorActivity extends AppCompatActivity {
         values.put(PetEntry.COLUMN_PET_NAME, name);
         values.put(PetEntry.COLUMN_PET_BREED, breed);
         values.put(PetEntry.COLUMN_PET_GENDER, mGender);
-        values.put(PetEntry.COLUMN_PET_WIEGHT, weight);
+        values.put(PetEntry.COLUMN_PET_WEIGHT, weight);
 
         Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
 
