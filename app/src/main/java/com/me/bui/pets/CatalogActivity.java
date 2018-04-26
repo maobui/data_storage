@@ -94,10 +94,51 @@ public class CatalogActivity extends AppCompatActivity {
 
         SQLiteDatabase db =  mDbHelper.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PetEntry.TABLE_NAME, null);
+        String[] projection = {
+                PetEntry._ID,
+                PetEntry.COLUMN_PET_NAME,
+                PetEntry.COLUMN_PET_BREED,
+                PetEntry.COLUMN_PET_GENDER,
+                PetEntry.COLUMN_PET_WIEGHT
+        };
+
+        Cursor cursor =  db.query(
+                PetEntry.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
         try {
             TextView displayView = (TextView) findViewById(R.id.text_view_pet);
-            displayView.setText("Number of rows in pets database table: " + cursor.getCount());
+            displayView.setText("Number of rows in pets database table: " + cursor.getCount() + "\n\n");
+
+            displayView.append(PetEntry._ID + " - "
+                    + PetEntry.COLUMN_PET_NAME + " - "
+                    + PetEntry.COLUMN_PET_BREED + " - "
+                    + PetEntry.COLUMN_PET_GENDER + " - "
+                    + PetEntry.COLUMN_PET_WIEGHT + "\n");
+
+            int idCurrIndx = cursor.getColumnIndex(PetEntry._ID);
+            int nameCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_NAME);
+            int breedCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_BREED);
+            int genderCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_GENDER);
+            int weightCurrIndx = cursor.getColumnIndex(PetEntry.COLUMN_PET_WIEGHT);
+            while (cursor.moveToNext()) {
+                int currID = cursor.getInt(idCurrIndx);
+                String currName = cursor.getString(nameCurrIndx);
+                String currBreed = cursor.getString(breedCurrIndx);
+                int currGender = cursor.getInt(genderCurrIndx);
+                int currWeight = cursor.getInt(weightCurrIndx);
+                displayView.append("\n" + currID + " - "
+                    + currName + " - "
+                    + currBreed + " - "
+                    + currGender + " - "
+                    + currWeight);
+            }
         } finally {
             cursor.close();
         }
