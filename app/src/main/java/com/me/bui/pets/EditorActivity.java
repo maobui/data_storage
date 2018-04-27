@@ -63,6 +63,8 @@ public class EditorActivity extends AppCompatActivity {
 
     private boolean mPetHasChanged = false;
 
+    private Uri mContentUri;
+
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -77,9 +79,10 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
         Intent intent = getIntent();
-        Uri contentUri = intent.getData();
-        if (contentUri == null) {
+        mContentUri = intent.getData();
+        if (mContentUri == null) {
             setTitle(getString(R.string.editor_activity_title_new_pet));
+            invalidateOptionsMenu();
         } else {
             setTitle(getString(R.string.editor_activity_title_edit_pet));
         }
@@ -142,6 +145,16 @@ public class EditorActivity extends AppCompatActivity {
         // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(mContentUri == null) {
+            MenuItem item = menu.findItem(R.id.action_delete);
+            item.setVisible(false);
+        }
+        return  true;
     }
 
     @Override
@@ -268,17 +281,19 @@ public class EditorActivity extends AppCompatActivity {
      * Perform the deletion of the pet in the database.
      */
     private void deletePet() {
-        int rowsDeleted = getContentResolver().delete(PetEntry.CONTENT_URI, null, null);
+        if (mContentUri != null) {
+            int rowsDeleted = getContentResolver().delete(PetEntry.CONTENT_URI, null, null);
 
-        // Show a toast message depending on whether or not the delete was successful.
-        if (rowsDeleted == 0) {
-            // If no rows were deleted, then there was an error with the delete.
-            Toast.makeText(this, getString(R.string.editor_delete_pet_failed),
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the delete was successful and we can display a toast.
-            Toast.makeText(this, getString(R.string.editor_delete_pet_successful),
-                    Toast.LENGTH_SHORT).show();
+            // Show a toast message depending on whether or not the delete was successful.
+            if (rowsDeleted == 0) {
+                // If no rows were deleted, then there was an error with the delete.
+                Toast.makeText(this, getString(R.string.editor_delete_pet_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the delete was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_delete_pet_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
         // Close the activity
         finish();

@@ -129,39 +129,38 @@ public class PetProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
         int match = sUriMatcher.match(uri);
+        int rowDeleted;
         switch (match){
             case PETS:
-                return db.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
+                rowDeleted = db.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case PET_ID:
                 selection = PetEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                return db.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
+                rowDeleted =  db.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Deletion is not support for " + uri);
         }
+        if (rowDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowDeleted;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
         int match = sUriMatcher.match(uri);
-        int rowDeleted;
         switch (match){
             case PETS:
-                rowDeleted = updatePet(uri, contentValues, selection, selectionArgs);
-                break;
+                return updatePet(uri, contentValues, selection, selectionArgs);
             case PET_ID:
                 selection = PetEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                rowDeleted = updatePet(uri, contentValues, selection, selectionArgs);
-                break;
+                return updatePet(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not support for " + uri);
         }
-
-        if (rowDeleted != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
-        }
-        return rowDeleted;
     }
 
     private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
