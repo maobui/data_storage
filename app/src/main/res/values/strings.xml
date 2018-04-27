@@ -66,4 +66,6 @@
     <string name="editor_delete_pet_failed">Delete was failed</string>
     <string name="editor_delete_pet_successful">Delete is successfull</string>
     <string name="unknown_breed">Unknown breed</string>
+    <string name="empty_view_title_text">It\\\'s a bit lonely here...</string>
+    <string name="empty_view_subtitle_text">Get started by adding a pet</string>
 </resources>
