@@ -61,6 +61,7 @@ public class PetProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query URI " + uri);
         }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -117,6 +118,9 @@ public class PetProvider extends ContentProvider {
             Log.e(TAG, " Failed insert row for " + uri);
             return  null;
         }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+
         return ContentUris.withAppendedId(uri, id);
     }
 
@@ -140,16 +144,24 @@ public class PetProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
         int match = sUriMatcher.match(uri);
+        int rowDeleted;
         switch (match){
             case PETS:
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                rowDeleted = updatePet(uri, contentValues, selection, selectionArgs);
+                break;
             case PET_ID:
                 selection = PetEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                rowDeleted = updatePet(uri, contentValues, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Update is not support for " + uri);
         }
+
+        if (rowDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowDeleted;
     }
 
     private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
@@ -182,6 +194,12 @@ public class PetProvider extends ContentProvider {
 
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        return db.update(PetEntry.TABLE_NAME, values, selection, selectionArgs);
+        int rowUpdated = db.update(PetEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        if(rowUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowUpdated;
     }
 }
