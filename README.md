@@ -33,3 +33,5 @@ https://classroom.udacity.com/courses/ud845
 ![](https://raw.githubusercontent.com/maobui/data_storage/master/cusor_loader.png)
 
 ![](https://raw.githubusercontent.com/maobui/data_storage/master/cusor_loader1.png)
+
+![](https://raw.githubusercontent.com/maobui/data_storage/master/cusor_loader_auto_loading.png)
