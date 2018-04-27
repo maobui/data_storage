@@ -78,5 +78,7 @@
 
     <!-- Dialog button text for the option to keep editing the current pet [CHAR LIMIT=20] -->
     <string name="keep_editing">Keep Editing</string>
+    <string name="editor_update_pet_failed">Update was failed</string>
+    <string name="editor_update_pet_successful">Update is successful.</string>
 
 </resources>
