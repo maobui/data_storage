@@ -27,3 +27,9 @@ https://classroom.udacity.com/courses/ud845
 ![](https://raw.githubusercontent.com/maobui/data_storage/master/cusor_adapter.png)
 
 ![](https://raw.githubusercontent.com/maobui/data_storage/master/cusor_adapter1.png)
+
+#### Cursor Loader
+
+![](https://raw.githubusercontent.com/maobui/data_storage/master/cusor_loader.png)
+
+![](https://raw.githubusercontent.com/maobui/data_storage/master/cusor_loader1.png)
